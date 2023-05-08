@@ -22,6 +22,7 @@ public class Listener : IDocumentSessionListener
   )
   {
     Events.AddRange(commit.GetEvents());
+    Documents.AddRange(commit.Updated);
     return Task.CompletedTask;
   }
 
