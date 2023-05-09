@@ -6,8 +6,11 @@ using Marten.Storage;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Npgsql;
+using Serilog;
+using Serilog.Extensions.Logging;
 using Shouldly;
 using Xunit.Abstractions;
+using ILogger = Microsoft.Extensions.Logging.ILogger;
 
 namespace MartenStoresWithSessionListener.Tests;
 
@@ -45,9 +48,22 @@ public class When_registering_two_marten_stores : IAsyncLifetime
       Password = "123456",
       Username = "postgres"
     }.ToString();
+    
+    Log.Logger = new LoggerConfiguration()
+      .WriteTo.TestOutput(_testOutputHelper)
+      .WriteTo.Console()
+      .CreateLogger();
 
-    _listener1 = new Listener();
-    _listener2 = new Listener();
+    var serilogLogger = Log.Logger = new LoggerConfiguration()
+      .MinimumLevel.Debug()
+      .WriteTo.TestOutput(_testOutputHelper)
+      .CreateLogger();
+
+    var dotnetILogger = new SerilogLoggerFactory(serilogLogger)
+      .CreateLogger("tests");
+
+    _listener1 = new Listener("store1",dotnetILogger);
+    _listener2 = new Listener("store2",dotnetILogger);
     var builder = Host.CreateDefaultBuilder();
     builder
       .ConfigureServices(

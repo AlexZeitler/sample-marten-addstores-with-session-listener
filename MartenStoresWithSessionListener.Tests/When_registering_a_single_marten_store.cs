@@ -33,7 +33,7 @@ public class When_registering_a_single_marten_store : IAsyncLifetime
       Username = "postgres"
     }.ToString();
 
-    _listener = new Listener();
+    _listener = new Listener("Default");
     var builder = Host.CreateDefaultBuilder();
     builder
       .ConfigureServices(
