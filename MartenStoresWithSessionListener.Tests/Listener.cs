@@ -276,7 +276,7 @@ public class Listener : IDocumentSessionListener
     }
 
     var cts = new CancellationTokenSource();
-    cts.CancelAfter(TimeSpan.FromSeconds(10));
+    cts.CancelAfter(TimeSpan.FromSeconds(20));
 
     var t = token ?? cts.Token;
 
