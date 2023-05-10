@@ -6,3 +6,13 @@ this is not [multi-tenancy](#multi-tenancy-with-database-per-tenant) but multipl
 event/document store configurations per host).
 
 It also shows how to register `IDocumentSessionListener`|s and `IConfigureMarten` ([docs](https://martendb.io/configuration/hostbuilder.html#composite-configuration-with-configuremarten)) per store.
+
+## Usage
+
+```bash
+cd test-database
+docker compose up -d
+cd ..
+dotnet test
+```
+
