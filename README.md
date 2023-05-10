@@ -5,4 +5,4 @@ with [multiple databases per Host](https://martendb.io/configuration/hostbuilder
 this is not [multi-tenancy](#multi-tenancy-with-database-per-tenant) but multiple
 event/document store configurations per host).
 
-It also shows how to register `IDocumentSessionListener`|s and `IConfigureMarten` [docs](https://martendb.io/configuration/hostbuilder.html#composite-configuration-with-configuremarten) per store.
+It also shows how to register `IDocumentSessionListener`|s and `IConfigureMarten` ([docs](https://martendb.io/configuration/hostbuilder.html#composite-configuration-with-configuremarten)) per store.
