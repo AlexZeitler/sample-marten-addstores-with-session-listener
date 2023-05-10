@@ -87,4 +87,48 @@ public class Listener : IDocumentSessionListener
   )
   {
   }
+
+  public Task WaitForProjection<T>(
+    Func<T, bool> predicate,
+    CancellationToken? token = default
+  )
+  {
+    _logger.LogInformation($"Listener waiting for Projection {typeof(T)}");
+
+    void Check(
+      CancellationToken token
+    )
+    {
+      var from = 0;
+      var attempts = 1;
+      while (!token.IsCancellationRequested)
+      {
+        _logger.LogInformation($"Looking for expected projection - attempt #{attempts}");
+        var upTo = Documents.Count;
+
+        for (var index = from; index < upTo; index++)
+        {
+          var ev = Documents[index];
+
+          if (typeof(T) == ev.GetType() && predicate((T)ev))
+          {
+            _logger.LogInformation($"Listener Found Projection {typeof(T).Name} with Id: {((dynamic)ev).Id}");
+            return;
+          }
+        }
+
+        from = upTo;
+
+        Thread.Sleep(200);
+        attempts++;
+      }
+    }
+
+    var cts = new CancellationTokenSource();
+    cts.CancelAfter(TimeSpan.FromSeconds(10));
+
+    var t = token ?? cts.Token;
+
+    return Task.Run(() => Check(t), t);
+  }
 }
