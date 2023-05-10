@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Npgsql;
 using Shouldly;
+using Weasel.Core;
 using Xunit.Abstractions;
 
 namespace MartenStoresWithSessionListener.Tests;
@@ -25,7 +26,7 @@ public class When_registering_a_single_marten_store : IAsyncLifetime
     var connectionString = new NpgsqlConnectionStringBuilder()
     {
       Pooling = false,
-      Port = 5435,
+      Port = 5437,
       Host = "localhost",
       CommandTimeout = 20,
       Database = "postgres",
@@ -41,6 +42,7 @@ public class When_registering_a_single_marten_store : IAsyncLifetime
           _ =>
           {
             _.Connection(connectionString);
+            _.AutoCreateSchemaObjects = AutoCreate.All;
             _.Events.TenancyStyle = TenancyStyle.Conjoined;
             _.Listeners.Add(_listener);
             _.Projections.AsyncListeners.Add(_listener);

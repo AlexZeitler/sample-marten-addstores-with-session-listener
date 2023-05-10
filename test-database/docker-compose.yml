@@ -18,4 +18,13 @@ services:
       POSTGRES_PASSWORD: '123456'
       POSTGRES_DB: 'postgres'
     ports:
-      - "5436:5432"
+      - "5436:5432"  
+  test-database-3:
+    image: library/postgres:14
+    container_name: testdb-3
+    environment:
+      POSTGRES_USER: 'postgres'
+      POSTGRES_PASSWORD: '123456'
+      POSTGRES_DB: 'postgres'
+    ports:
+      - "5437:5432"
